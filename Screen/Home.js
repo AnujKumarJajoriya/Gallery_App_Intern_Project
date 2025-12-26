@@ -23,27 +23,27 @@ const Home = () => {
 
         try {
 
-                const result = await fetch(Flicker_Url)
-        const data = await result.json()
+            const result = await fetch(Flicker_Url)
+            const data = await result.json()
 
-        const actualphotos = data.photos.photo
+            const actualphotos = data.photos.photo
 
 
-        const storedimages = await AsyncStorage.getItem("Last_Fetched_Images")
-        const alreadystored = storedimages ? JSON.parse(storedimages) : []
+            const storedimages = await AsyncStorage.getItem("Last_Fetched_Images")
+            const alreadystored = storedimages ? JSON.parse(storedimages) : []
 
-        if (JSON.stringify(actualphotos) !== JSON.stringify(alreadystored)) {
+            if (JSON.stringify(actualphotos) !== JSON.stringify(alreadystored)) {
 
-            setimages(actualphotos)
-            await AsyncStorage.setItem("Last_Fetched_Images", JSON.stringify(actualphotos))
-        }
-            
+                setimages(actualphotos)
+                await AsyncStorage.setItem("Last_Fetched_Images", JSON.stringify(actualphotos))
+            }
+
         } catch (error) {
             console.error("user is offline")
-            
+
         }
 
-    
+
 
 
 
@@ -59,6 +59,8 @@ const Home = () => {
             data={images}
             keyExtractor={(item) => item.id}
             numColumns={2}
+            refreshing={false}
+            onRefresh={fetchImages}
             renderItem={({ item }) => (
                 <Image
                     source={{ uri: item.url_s }}
